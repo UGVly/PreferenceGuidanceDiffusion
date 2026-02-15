@@ -1,25 +1,28 @@
+# Rethinking Preference Alignment for Diffusion Models with Classifier-Free Guidance
 
 
-
-uv add --group metrics torchmetrics torch-fidelity clean-fid lpips open-clip-torch
-
-
-uv add --group image-reward image-reward 
-uv add --group hps hpsv2 hpsv3
-uv add --group reward image-reward 
-uv add --dev
-
-uv sync --no-dev
+## Environment setup
+```bash
 uv sync
+```
+
+## Dataset
 
 
 
 
+## Model Training 
 
-uv run --group train -- accelerate launch train.py
-
-
-
+This code is mainly built upon [Diffusion-DPO](https://github.com/SalesforceAIResearch/DiffusionDPO), [Diffusers](https://github.com/huggingface/diffusers)
 
 
-<!-- uv run accelerate launch train.py --arg1 ... --arg2 ... -->
+
+### Training on Stable Diffusion XL
+
+```bash
+bash sdxl.sh
+```
+
+###
+
+

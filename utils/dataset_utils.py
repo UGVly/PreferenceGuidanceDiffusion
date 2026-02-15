@@ -29,13 +29,12 @@ def get_train_dataloader(args,  accelerator):
 
 
     if args.dataset_name == "MizzenAI/HPDv3":
-        train_dataset = HPDv3Dataset(split = "train", need_chosen = args.hpdv3_chosen, root_path = "/home/jiangzhou/.cache/modelscope/hub/datasets/MizzenAI/HPDv3/")
+        train_dataset = HPDv3Dataset(split = "train", need_chosen = args.hpdv3_chosen, root_path = "")
         train_dataloader = DataLoader(train_dataset, batch_size=args.train_batch_size, shuffle=args.need_shuffle, num_workers=args.dataloader_num_workers)
 
         return train_dataloader
 
     train_dataset = load_dataset(
-        "/home/jiangzhou/.cache/huggingface/datasets/yuvalkirstain___pickapic_v2/default-3e0a2e77032723b9/0.0.0/e58c486e4bad3c9cf8d969f920449d1103bbdf069a7150db2cf96c695aeca990",
         split="train",
     )
 
@@ -382,29 +381,3 @@ def collate_fn(examples):
         "crop_top_lefts": crop_top_lefts,
     }
 
-
-# def compute_time_ids(args, accelerator, weight_dtype, original_size, crops_coords_top_left):
-#     # Adapted from pipeline.StableDiffusionXLPipeline._get_add_time_ids
-#     target_size = (args.resolution, args.resolution)
-#     add_time_ids = list(original_size + crops_coords_top_left + target_size)
-#     add_time_ids = torch.tensor([add_time_ids])
-#     add_time_ids = add_time_ids.to(accelerator.device, dtype=weight_dtype)
-#     return add_time_ids
-
-
-# def compute_loss(args, noise_scheduler, model_pred, target):
-#     model_losses = F.mse_loss(model_pred.float(), target.float(), reduction="none")
-#     model_losses = model_losses.mean(dim=list(range(1, len(model_losses.shape))))
-#     model_losses_w, model_losses_l = model_losses.chunk(2)
-#     log_odds = (args.snr_value * model_losses_w) / (torch.exp(args.snr_value * model_losses_w) - 1) - (
-#         args.snr_value * model_losses_l
-#     ) / (torch.exp(args.snr_value * model_losses_l) - 1)
-
-#     # Ratio loss.
-#     # By multiplying T to the inner term, we try to maximize the margin throughout the overall denoising process.
-#     ratio = F.logsigmoid(log_odds * noise_scheduler.config.num_train_timesteps)
-#     ratio_losses = args.beta_mapo * ratio
-
-#     # Full ORPO loss
-#     loss = model_losses_w.mean() - ratio_losses.mean()
-#     return loss, model_losses_w, model_losses_l, ratio_losses
